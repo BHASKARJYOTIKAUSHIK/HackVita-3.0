@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalentMatch AI | Recruitment Simplified</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(90deg, #4F46E5 0%, #7C3AED 100%);
+        }
+        .upload-area {
+            border: 2px dashed #6366F1;
+            transition: all 0.3s;
+        }
+        .upload-area:hover {
+            border-color: #4F46E5;
+            background-color: rgba(99, 102, 241, 0.05);
+        }
+        .result-card {
+            transition: transform 0.3s;
+        }
+        .result-card:hover {
+            transform: translateY(-5px);
+        }
+        .pulse-animation {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0.6;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <nav class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+                </svg>
+                <h1 class="text-xl font-bold">TalentMatch AI</h1>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#" class="hover:text-indigo-200 transition">Features</a>
+                <a href="#" class="hover:text-indigo-200 transition">How It Works</a>
+                <a href="#" class="hover:text-indigo-200 transition">About</a>
+                <a href="#" class="bg-white text-indigo-600 px-4 py-2 rounded-md font-medium hover:bg-indigo-100 transition">Sign Up</a>
+            </div>
+            <div class="md:hidden">
+                <button class="focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8">
+        <section class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Match the Right Talent to the Right Role</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Our AI-powered platform analyzes resumes and job descriptions to find the perfect match, saving you hours of manual screening.</p>
+        </section>
+
+        <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-md overflow-hidden mb-12">
+            <div class="md:flex">
+                <div class="p-8 w-full">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Job Description</h3>
+                        <div class="upload-area p-4 rounded-lg text-center" id="job-upload-area">
+                            <div class="mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                </svg>
+                            </div>
+                            <p class="text-gray-600 mb-2">Drag & drop your job description file or</p>
+                            <label class="cursor-pointer bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition">
+                                Browse Files
+                                <input type="file" class="hidden" id="job-file-input">
+                            </label>
+                            <p class="mt-2 text-sm text-gray-500">Or paste job description below</p>
+                        </div>
+                        <textarea id="job-description" class="w-full mt-3 p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" rows="6" placeholder="Paste job description here..."></textarea>
+                    </div>
+
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Candidate Resumes</h3>
+                        <div class="upload-area p-4 rounded-lg text-center" id="resume-upload-area">
+                            <div class="mb-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                            </div>
+                            <p class="text-gray-600 mb-2">Drag & drop multiple resume files or</p>
+                            <label class="cursor-pointer bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition">
+                                Browse Files
+                                <input type="file" multiple class="hidden" id="resume-file-input">
+                            </label>
+                        </div>
+                        <div id="resume-list" class="mt-3 space-y-2"></div>
+                    </div>
+
+                    <button id="analyze-btn" class="w-full bg-indigo-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-indigo-700 transition focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        Match Candidates
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <section id="results-section" class="hidden">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Matching Results</h3>
+            
+            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3" id="results-container">
+                <!-- Results will be inserted here -->
+            </div>
+        </section>
+
+        <section class="py-12">
+            <div class="max-w-4xl mx-auto text-center">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">How TalentMatch AI Works</h3>
+                <div class="grid md:grid-cols-3 gap-8 mt-8">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-2">Upload Documents</h4>
+                        <p class="text-gray-600">Upload your job descriptions and candidate resumes in various formats.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-2">AI Analysis</h4>
+                        <p class="text-gray-600">Our AI analyzes key skills, experience, and requirements to find matches.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h4 class="text-lg font-semibold mb-2">Get Results</h4>
+                        <p class="text-gray-600">Receive ranked matches with detailed analysis of fit and key strengths.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+                        </svg>
+                        <span class="font-bold">TalentMatch AI</span>
+                    </div>
+                    <p class="text-gray-400 mt-1">Recruitment Simplified</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="#" class="hover:text-indigo-300 transition">Privacy Policy</a>
+                    <a href="#" class="hover:text-indigo-300 transition">Terms of Service</a>
+                    <a href="#" class="hover:text-indigo-300 transition">Contact Us</a>
+                </div>
+            </div>
+            <div class="mt-6 text-center text-gray-400 text-sm">
+                &copy; 2025 TalentMatch AI. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+            <div class="text-center">
+                <svg class="animate-spin h-10 w-10 text-indigo-600 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Analyzing Candidates</h3>
+                <p class="text-gray-600" id="loading-message">Our AI is processing your data...</p>
+                <div class="mt-4 h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="h-full bg-indigo-600 transition-all duration-300" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const jobFileInput = document.getElementById('job-file-input');
+            const jobUploadArea = document.getElementById('job-upload-area');
+            const jobDescription = document.getElementById('job-description');
+            
+            const resumeFileInput = document.getElementById('resume-file-input');
+            const resumeUploadArea = document.getElementById('resume-upload-area');
+            const resumeList = document.getElementById('resume-list');
+            
+            const analyzeBtn = document.getElementById('analyze-btn');
+            const resultsSection = document.getElementById('results-section');
+            const resultsContainer = document.getElementById('results-container');
+            
+            const loadingOverlay = document.getElementById('loading-overlay');
+            const loadingMessage = document.getElementById('loading-message');
+            const progressBar = document.getElementById('progress-bar');
+            
+            // Drag and drop for job description
+            jobUploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                jobUploadArea.classList.add('bg-indigo-50');
+            });
+            
+            jobUploadArea.addEventListener('dragleave', () => {
+                jobUploadArea.classList.remove('bg-indigo-50');
+            });
+            
+            jobUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                jobUploadArea.classList.remove('bg-indigo-50');
+                
+                if (e.dataTransfer.files.length > 0) {
+                    const file = e.dataTransfer.files[0];
+                    handleJobFile(file);
+                }
+            });
+            
+            jobFileInput.addEventListener('change', () => {
+                if (jobFileInput.files.length > 0) {
+                    const file = jobFileInput.files[0];
+                    handleJobFile(file);
+                }
+            });
+            
+            // Drag and drop for resumes
+            resumeUploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                resumeUploadArea.classList.add('bg-indigo-50');
+            });
+            
+            resumeUploadArea.addEventListener('dragleave', () => {
+                resumeUploadArea.classList.remove('bg-indigo-50');
+            });
+            
+            resumeUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                resumeUploadArea.classList.remove('bg-indigo-50');
+                
+                if (e.dataTransfer.files.length > 0) {
+                    Array.from(e.dataTransfer.files).forEach(file => {
+                        handleResumeFile(file);
+                    });
+                }
+            });
+            
+            resumeFileInput.addEventListener('change', () => {
+                if (resumeFileInput.files.length > 0) {
+                    Array.from(resumeFileInput.files).forEach(file => {
+                        handleResumeFile(file);
+                    });
+                }
+            });
+            
+            // Submit button
+            // Replace the analyzeBtn click handler with:
+analyzeBtn.addEventListener('click', async () => {
+    try {
+        // 1. Create Job
+        const jobResponse = await fetch('/api/jobs', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                title: document.getElementById('job-title').value,
+                description: jobDescription.value,
+                user_id: DEMO_USER_ID
+            })
+        });
+        
+        // 2. Upload Resumes
+        const resumeFiles = resumeFileInput.files;
+        const candidateIds = [];
+        
+        for (const file of resumeFiles) {
+            const formData = new FormData();
+            formData.append('resume', file);
+            formData.append('user_id', DEMO_USER_ID);
+            
+            const candidateResponse = await fetch('/api/candidates', {
+                method: 'POST',
+                body: formData
+            });
+            const candidateData = await candidateResponse.json();
+            candidateIds.push(candidateData.candidate_id);
+        }
+        
+        // 3. Match Candidates
+        const matchResponse = await fetch('/api/match', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                job_id: jobResponse.job_id,
+                candidate_ids: candidateIds
+            })
+        });
+        
+        // 4. Show Results
+        const results = await fetch(`/api/matches?job_id=${jobResponse.job_id}`);
+        showResults(await results.json());
+        
+    } catch (error) {
+        console.error('Analysis failed:', error);
+    }
+});
+
+            
+            function handleJobFile(file) {
+                if (file.type === 'application/pdf' || file.type.includes('text') || file.type.includes('document')) {
+                    // In a real app, we would parse the file here
+                    jobDescription.value = `Sample job description for ${file.name}\n\nWe are looking for a talented software engineer with experience in JavaScript, React, and Node.js. The ideal candidate has 3+ years of experience building web applications and is familiar with agile development practices.`;
+                } else {
+                    alert('Please upload a PDF, Word document, or text file');
+                }
+            }
+            
+            function handleResumeFile(file) {
+                if (file.type === 'application/pdf' || file.type.includes('text') || file.type.includes('document')) {
+                    const resumeItem = document.createElement('div');
+                    resumeItem.className = 'flex items-center justify-between bg-indigo-50 p-3 rounded-lg';
+                    resumeItem.innerHTML = `
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            <span class="truncate max-w-xs">${file.name}</span>
+                        </div>
+                        <button class="remove-resume text-gray-500 hover:text-red-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    `;
+                    
+                    resumeList.appendChild(resumeItem);
+                    
+                    resumeItem.querySelector('.remove-resume').addEventListener('click', () => {
+                        resumeList.removeChild(resumeItem);
+                    });
+                } else {
+                    alert('Please upload a PDF, Word document, or text file');
+                }
+            }
+            
+            function showResults() {
+                // Hide loading overlay
+                loadingOverlay.classList.add('hidden');
+                loadingOverlay.classList.remove('flex');
+                
+                // Show results section
+                resultsSection.classList.remove('hidden');
+                
+                // Sample candidates data (in a real app, this would come from the backend)
+                const candidates = [
+                    {
+                        name: "Alex Johnson",
+                        matchScore: 92,
+                        keySkills: ["JavaScript", "React", "Node.js", "AWS"],
+                        experience: "5 years",
+                        strengths: ["Strong frontend expertise", "Experience with similar projects"],
+                        gaps: ["Limited Python experience"]
+                    },
+                    {
+                        name: "Taylor Smith",
+                        matchScore: 87,
+                        keySkills: ["JavaScript", "Angular", "Node.js", "Docker"],
+                        experience: "4 years",
+                        strengths: ["DevOps knowledge", "Good communication skills"],
+                        gaps: ["No React experience"]
+                    },
+                    {
+                        name: "Jordan Lee",
+                        matchScore: 78,
+                        keySkills: ["React", "Vue.js", "HTML/CSS", "Firebase"],
+                        experience: "3 years",
+                        strengths: ["UI/UX focus", "Fast learner"],
+                        gaps: ["Less backend experience", "No Node.js"]
+                    },
+                    {
+                        name: "Casey Williams",
+                        matchScore: 68,
+                        keySkills: ["JavaScript", "jQuery", "PHP", "MySQL"],
+                        experience: "6 years",
+                        strengths: ["Long development experience", "Problem-solving skills"],
+                        gaps: ["Limited modern framework experience", "No React"]
+                    },
+                    {
+                        name: "Riley Garcia",
+                        matchScore: 62,
+                        keySkills: ["Java", "Spring", "JavaScript", "React Native"],
+                        experience: "4 years", 
+                        strengths: ["Mobile development skills", "Strong CS fundamentals"],
+                        gaps: ["Less web-focused experience", "No Node.js"]
+                    }
+                ];
+                
+                // Clear previous results
+                resultsContainer.innerHTML = '';
+                
+                // Add candidate cards
+                candidates.forEach(candidate => {
+                    const card = document.createElement('div');
+                    card.className = 'result-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-200';
+                    
+                    // Determine color based on match score
+                    let matchColor, matchBg;
+                    if (candidate.matchScore >= 85) {
+                        matchColor = 'text-green-700';
+                        matchBg = 'bg-green-100';
+                    } else if (candidate.matchScore >= 70) {
+                        matchColor = 'text-yellow-700';
+                        matchBg = 'bg-yellow-100';
+                    } else {
+                        matchColor = 'text-red-700';
+                        matchBg = 'bg-red-100';
+                    }
+                    
+                    card.innerHTML = `
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-4">
+                                <h4 class="text-xl font-bold text-gray-800">${candidate.name}</h4>
+                                <div class="${matchBg} ${matchColor} font-semibold px-3 py-1 rounded-full text-sm">
+                                    ${candidate.matchScore}% Match
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="text-sm text-gray-500 mb-1">Experience</div>
+                                <div class="font-medium">${candidate.experience}</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="text-sm text-gray-500 mb-1">Key Skills</div>
+                                <div class="flex flex-wrap gap-1">
+                                    ${candidate.keySkills.map(skill => 
+                                        `<span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded-full">${skill}</span>`
+                                    ).join('')}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="text-sm text-gray-500 mb-1">Strengths</div>
+                                <ul class="list-disc list-inside text-sm">
+                                    ${candidate.strengths.map(strength => 
+                                        `<li>${strength}</li>`
+                                    ).join('')}
+                                </ul>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <div class="text-sm text-gray-500 mb-1">Improvement Areas</div>
+                                <ul class="list-disc list-inside text-sm">
+                                    ${candidate.gaps.map(gap => 
+                                        `<li>${gap}</li>`
+                                    ).join('')}
+                                </ul>
+                            </div>
+                            
+                            <div class="flex justify-between mt-auto pt-3 border-t border-gray-200">
+                                <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                                    View Full Profile
+                                </button>
+                                <button class="bg-indigo-600 text-white text-sm px-3 py-1 rounded hover:bg-indigo-700 transition">
+                                    Contact
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    resultsContainer.appendChild(card);
+                });
+                
+                // Scroll to results
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    </script> -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const jobFileInput = document.getElementById('job-file-input');
+        const jobUploadArea = document.getElementById('job-upload-area');
+        const jobDescription = document.getElementById('job-description');
+        
+        const resumeFileInput = document.getElementById('resume-file-input');
+        const resumeUploadArea = document.getElementById('resume-upload-area');
+        const resumeList = document.getElementById('resume-list');
+        
+        const analyzeBtn = document.getElementById('analyze-btn');
+        const resultsSection = document.getElementById('results-section');
+        const resultsContainer = document.getElementById('results-container');
+        
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const loadingMessage = document.getElementById('loading-message');
+        const progressBar = document.getElementById('progress-bar');
+    
+        const DEMO_USER_ID = 'demo_user'; // Define demo user ID
+    
+        // Drag and drop for job description
+        jobUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            jobUploadArea.classList.add('bg-indigo-50');
+        });
+        
+        jobUploadArea.addEventListener('dragleave', () => {
+            jobUploadArea.classList.remove('bg-indigo-50');
+        });
+        
+        jobUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            jobUploadArea.classList.remove('bg-indigo-50');
+            if (e.dataTransfer.files.length > 0) {
+                handleJobFile(e.dataTransfer.files[0]);
+            }
+        });
+        
+        jobFileInput.addEventListener('change', () => {
+            if (jobFileInput.files.length > 0) {
+                handleJobFile(jobFileInput.files[0]);
+            }
+        });
+        
+        // Drag and drop for resumes
+        resumeUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            resumeUploadArea.classList.add('bg-indigo-50');
+        });
+        
+        resumeUploadArea.addEventListener('dragleave', () => {
+            resumeUploadArea.classList.remove('bg-indigo-50');
+        });
+        
+        resumeUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            resumeUploadArea.classList.remove('bg-indigo-50');
+            Array.from(e.dataTransfer.files).forEach(file => handleResumeFile(file));
+        });
+        
+        resumeFileInput.addEventListener('change', () => {
+            if (resumeFileInput.files.length > 0) {
+                Array.from(resumeFileInput.files).forEach(file => handleResumeFile(file));
+            }
+        });
+        
+        // Analyze button handler
+        analyzeBtn.addEventListener('click', async () => {
+            if (!jobDescription.value) {
+                alert('Please provide a job description');
+                return;
+            }
+            if (resumeFileInput.files.length === 0) {
+                alert('Please upload at least one resume');
+                return;
+            }
+    
+            loadingOverlay.classList.remove('hidden');
+            loadingOverlay.classList.add('flex');
+    
+            try {
+                // 1. Create Job
+                const jobResponse = await fetch('/api/jobs', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        title: 'Untitled Job', // Default title since no input field
+                        description: jobDescription.value,
+                        user_id: DEMO_USER_ID
+                    })
+                });
+                const jobData = await jobResponse.json();
+                if (!jobData.success) throw new Error('Job creation failed');
+                const job_id = jobData.job_id;
+    
+                // 2. Upload Resumes
+                const resumeFiles = resumeFileInput.files;
+                const candidateIds = [];
+                
+                for (const file of resumeFiles) {
+                    const formData = new FormData();
+                    formData.append('resume', file);
+                    formData.append('user_id', DEMO_USER_ID);
+                    
+                    const candidateResponse = await fetch('/api/candidates', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const candidateData = await candidateResponse.json();
+                    if (!candidateData.success) throw new Error('Candidate upload failed');
+                    candidateIds.push(candidateData.candidate_id);
+                }
+                
+                // 3. Match Candidates
+                const matchResponse = await fetch('/api/match', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        job_id: job_id,
+                        candidate_ids: candidateIds
+                    })
+                });
+                const matchData = await matchResponse.json();
+                if (!matchData.success) throw new Error('Matching failed');
+    
+                // 4. Show Results
+                showResults(matchData);
+            } catch (error) {
+                console.error('Analysis failed:', error);
+                alert('An error occurred during analysis');
+            } finally {
+                loadingOverlay.classList.add('hidden');
+                loadingOverlay.classList.remove('flex');
+            }
+        });
+    
+        function handleJobFile(file) {
+            if (file.type === 'application/pdf' || file.type.includes('text') || file.type.includes('document')) {
+                jobDescription.value = `Sample job description for ${file.name}\n\nWe are looking for a talented software engineer with experience in JavaScript, React, and Node.js. The ideal candidate has 3+ years of experience building web applications and is familiar with agile development practices.`;
+            } else {
+                alert('Please upload a PDF, Word document, or text file');
+            }
+        }
+        
+        function handleResumeFile(file) {
+            if (file.type === 'application/pdf' || file.type.includes('text') || file.type.includes('document')) {
+                const resumeItem = document.createElement('div');
+                resumeItem.className = 'flex items-center justify-between bg-indigo-50 p-3 rounded-lg';
+                resumeItem.innerHTML = `
+                    <div class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <span class="truncate max-w-xs">${file.name}</span>
+                    </div>
+                    <button class="remove-resume text-gray-500 hover:text-red-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                `;
+                resumeList.appendChild(resumeItem);
+                resumeItem.querySelector('.remove-resume').addEventListener('click', () => {
+                    resumeList.removeChild(resumeItem);
+                });
+            } else {
+                alert('Please upload a PDF, Word document, or text file');
+            }
+        }
+        
+        function showResults(data) {
+            if (!data.success) {
+                alert('Error retrieving matches');
+                return;
+            }
+            
+            const matches = data.matches;
+            resultsContainer.innerHTML = '';
+            
+            matches.forEach(match => {
+                const candidate = {
+                    name: match.name,
+                    matchScore: match.match_score,
+                    keySkills: match.key_skills,
+                    experience: match.experience,
+                    strengths: match.strengths,
+                    gaps: match.gaps
+                };
+                
+                let matchColor, matchBg;
+                if (candidate.matchScore >= 85) {
+                    matchColor = 'text-green-700';
+                    matchBg = 'bg-green-100';
+                } else if (candidate.matchScore >= 70) {
+                    matchColor = 'text-yellow-700';
+                    matchBg = 'bg-yellow-100';
+                } else {
+                    matchColor = 'text-red-700';
+                    matchBg = 'bg-red-100';
+                }
+                
+                const card = document.createElement('div');
+                card.className = 'result-card bg-white rounded-xl shadow-md overflow-hidden border border-gray-200';
+                card.innerHTML = `
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h4 class="text-xl font-bold text-gray-800">${candidate.name}</h4>
+                            <div class="${matchBg} ${matchColor} font-semibold px-3 py-1 rounded-full text-sm">
+                                ${candidate.matchScore}% Match
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="text-sm text-gray-500 mb-1">Experience</div>
+                            <div class="font-medium">${candidate.experience}</div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="text-sm text-gray-500 mb-1">Key Skills</div>
+                            <div class="flex flex-wrap gap-1">
+                                ${candidate.keySkills.map(skill => 
+                                    `<span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded-full">${skill}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="text-sm text-gray-500 mb-1">Strengths</div>
+                            <ul class="list-disc list-inside text-sm">
+                                ${candidate.strengths.map(strength => 
+                                    `<li>${strength}</li>`
+                                ).join('')}
+                            </ul>
+                        </div>
+                        <div class="mb-4">
+                            <div class="text-sm text-gray-500 mb-1">Improvement Areas</div>
+                            <ul class="list-disc list-inside text-sm">
+                                ${candidate.gaps.map(gap => 
+                                    `<li>${gap}</li>`
+                                ).join('')}
+                            </ul>
+                        </div>
+                        <div class="flex justify-between mt-auto pt-3 border-t border-gray-200">
+                            <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                                View Full Profile
+                            </button>
+                            <button class="bg-indigo-600 text-white text-sm px-3 py-1 rounded hover:bg-indigo-700 transition">
+                                Contact
+                            </button>
+                        </div>
+                    </div>
+                `;
+                resultsContainer.appendChild(card);
+            });
+            
+            resultsSection.classList.remove('hidden');
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+</script>
+</body>
+</html>
